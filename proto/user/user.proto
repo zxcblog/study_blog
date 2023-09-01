@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "zxcblog/study_blog/proto/user;user";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "base/token.proto";
+
+// User 用户管理
+service User {
+  rpc Register(RegisterReq)returns(UserAuthRes){
+    option (google.api.http) = {
+      post: "/v1/user/register",
+      body: "*",
+    };
+  }
+
+  // Login 用户登录
+  rpc Login(LoginReq)returns(UserAuthRes){
+    option (google.api.http) = {
+      post: "/v1/user/login",
+      body: "*",
+    };
+  }
+}
+
+message UserInfo {
+  string account = 1[(validate.rules).string = {min_len: 1}]; // 用户账号
+  string nickname = 2; // 用户昵称
+  string mobile = 3;
+}
+
+
+message RegisterReq {
+  string account         = 1[(validate.rules).string = {min_len: 1}]; // 账户
+  string nickname         = 2;                                        // 昵称
+  string password         = 3[(validate.rules).string = {min_len: 1}];// 密码
+  string confirm_password = 4; // 确认密码
+  string mobile           = 5; // 手机号
+  string mobile_cache     = 6; // 手机验证码
+  string img_cache        = 7; // 图形验证码
+}
+
+
+enum LoginType {
+  Detault_Login = 0; // 账号密码登录
+  Mobile_Login = 1; // 手机验证码登录
+}
+
+message LoginReq {
+  LoginType type  = 1; // 登录类型
+  string account  = 2[(validate.rules).string = {min_len: 1}]; // 账号
+  string password = 3; // 认证密码
+  string capthca  = 4; // 验证码
+}
+
+message UserAuthRes {
+  UserInfo userinfo = 1; // 用户登录信息
+  base.v1.Auth token_info = 2; // token认证信息
+}

@@ -16,7 +16,3 @@ message PageRes {
   int64 page_size = 4;
 }
 
-message Response {
-  string code = 1;
-  string msg = 2;
-}

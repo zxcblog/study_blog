@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package base.v1;
+
+option go_package = "zxcblog/study_blog/proto/base;base";
+
+message Auth {
+  string token = 1; // 认证token
+  int64 expire = 2; // 认证过期时间
+}
