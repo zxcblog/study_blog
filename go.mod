@@ -1,3 +1,3 @@
-module zxc7310/grpc
+module zxcblog/study_blog
 
-go 1.21.0
+go 1.20
