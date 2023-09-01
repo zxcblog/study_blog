@@ -1,0 +1,8 @@
+version: v1beta1
+name: buf.build/zxcblog/study_blog
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/envoyproxy/protoc-gen-validate
+build:
+  roots:
+    - .

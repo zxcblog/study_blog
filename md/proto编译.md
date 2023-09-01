@@ -20,5 +20,19 @@ docker run --rm zxc/buf:v1 -v
 ```shell
 # 初始化proto模块
 docker run --rm -v "$(pwd)/proto:/workspace" --workdir /workspace zxc/buf:v1 mod init
+
+# 更新要拉取的模块并锁定版本
+docker run --rm -v "$(pwd)/proto:/workspace" --workdir /workspace zxc/buf:v1 mod update
+
+# 将proto转换成go文件
+docker run --rm -v "$(pwd)/proto:/workspace" --workdir /workspace zxc/buf:v1 generate
 ```
 
+## buf.gen.yaml
+是命令用于生成语言集成代码的配置文件 您的选择。此文件最常与模块一起使用（但可以与其他输入类型一起使用），并且通常放置在 Protobuf 文件根目录下
+
+# 在服务中运行
+```shell
+# 打包服务中的proto文件并生成pb
+docker run --rm -v "$(pwd):/workspace" --workdir /workspace/proto zxc/buf:v1 generate
+```
