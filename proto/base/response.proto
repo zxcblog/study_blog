@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package base.v1;
 
-option go_package = "zxcblog/study_blog/proto/base;base";
+option go_package = "zxcblog/study_blog/pb/base;base";
 
 message PageReq {
   int64 limit = 1;
