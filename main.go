@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"net"
+	"time"
 	"zxcblog/study_blog/internal/middleware"
 	user2 "zxcblog/study_blog/internal/service/user"
 	"zxcblog/study_blog/pb/user"
@@ -41,7 +42,10 @@ func main() {
 	defer conn.Close()
 
 	c := user.NewUserClient(conn)
-	_, err = c.Register(context.Background(), &user.RegisterReq{
+
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
+	defer cancel()
+	_, err = c.Register(ctx, &user.RegisterReq{
 		Account:         "",
 		Nickname:        "",
 		Password:        "",

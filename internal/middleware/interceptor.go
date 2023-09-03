@@ -18,9 +18,3 @@ func Interceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInf
 	log.Println("查看请求后信息", m)
 	return m, err
 }
-
-//// SteamInterceptor 流拦截器
-//// 实现 grpc.StreamServerInterceptor 方法
-//func SteamInterceptor(srv interface{}, ss ServerStream, info *StreamServerInfo, handler StreamHandler) error {
-//
-//}
