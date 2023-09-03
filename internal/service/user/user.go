@@ -14,6 +14,10 @@ func NewUserService() user.UserServer {
 }
 
 func (u UserService) Register(ctx context.Context, req *user.RegisterReq) (*user.UserAuthRes, error) {
+	if err := req.ValidateAll(); err != nil {
+		return nil, err
+	}
+
 	//TODO implement me
 	return nil, errors.New("implement me")
 }

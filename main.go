@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"net"
+	"zxcblog/study_blog/internal/middleware"
 	user2 "zxcblog/study_blog/internal/service/user"
 	"zxcblog/study_blog/pb/user"
 )
@@ -17,7 +18,10 @@ func main() {
 		return
 	}
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(middleware.Interceptor),
+		grpc.StreamInterceptor(middleware.MiddlewareStreamInterceptor),
+	)
 	user.RegisterUserServer(s, user2.NewUserService())
 
 	go func() {
