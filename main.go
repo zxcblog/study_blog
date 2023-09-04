@@ -9,7 +9,9 @@ import (
 	"time"
 	"zxcblog/study_blog/internal/middleware"
 	user2 "zxcblog/study_blog/internal/service/user"
+	"zxcblog/study_blog/pb/base"
 	"zxcblog/study_blog/pb/user"
+	"zxcblog/study_blog/pkg/errcode"
 )
 
 func main() {
@@ -43,19 +45,28 @@ func main() {
 
 	c := user.NewUserClient(conn)
 
-	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Second))
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(2*time.Minute))
 	defer cancel()
 	_, err = c.Register(ctx, &user.RegisterReq{
-		Account:         "",
-		Nickname:        "",
-		Password:        "",
-		ConfirmPassword: "",
-		Mobile:          "",
-		MobileCache:     "",
-		ImgCache:        "",
+		Account:         "1",
+		Nickname:        "1",
+		Password:        "1",
+		ConfirmPassword: "1",
+		Mobile:          "1",
+		MobileCache:     "1",
+		ImgCache:        "1",
 	})
 	if err != nil {
-		fmt.Println("用户注册失败", err.Error())
+
+		status := errcode.FromError(err)
+		fmt.Println("用户注册失败", status.Code())
+		fmt.Println("用户注册失败", status.Message())
+
+		for _, v := range status.Details() {
+			if val, ok := v.(*base.Error); ok {
+				fmt.Println("循环", val.Code, val.Message, val.Detail)
+			}
+		}
 		return
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"zxcblog/study_blog/pb/user"
+	"zxcblog/study_blog/pkg/errcode"
 )
 
 type UserService struct {
@@ -19,7 +20,7 @@ func (u UserService) Register(ctx context.Context, req *user.RegisterReq) (*user
 	}
 
 	//TODO implement me
-	return nil, errors.New("implement me")
+	return nil, errcode.ToGrpcError(errcode.NewError(1234, "测试错误代码"))
 }
 
 func (u UserService) Login(ctx context.Context, req *user.LoginReq) (*user.UserAuthRes, error) {
