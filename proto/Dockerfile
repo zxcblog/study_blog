@@ -19,7 +19,7 @@ RUN go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 FROM alpine:3.18
 
 COPY --from=builder /go/bin /usr/local/bin
-COPY ./services/proto/buf-Linux-x86_64 /usr/local/bin/buf
+COPY ../services/proto/buf-Linux-x86_64 /usr/local/bin/buf
 
 RUN chmod +x "/usr/local/bin/buf"
 

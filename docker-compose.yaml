@@ -1,0 +1,57 @@
+version: "3.9"
+services:
+    etcd1:
+      image: bitnami/etcd:${ETCD_VERSION}
+      container_name: etcd1_con
+      entrypoint: ["/opt/bitnami/etcd/bin/etcd", "--config-file", "/opt/bitnami/etcd/conf/etcd.yaml"]
+      ports:
+        - "${ETCD1_PORT}:2379"
+        - "${ETCD1_80_PORT}:2380"
+      environment:
+        ETCDCTL_API: 3
+        ALLOW_NONE_AUTHENTICATION: "yes" # 开发环境测试， etcd密码设置为空
+      volumes:
+        - "${ETCD1_YAML_FILE}:/opt/bitnami/etcd/conf/etcd.yaml"
+        - "${ETCD1_DATA}:/etcd/data:rw"
+      networks:
+        study_blog:
+          ipv4_address: 172.26.0.101
+    etcd2:
+      image: bitnami/etcd:${ETCD_VERSION}
+      container_name: etcd2_con
+      entrypoint: ["/opt/bitnami/etcd/bin/etcd", "--config-file", "/opt/bitnami/etcd/conf/etcd.yaml"]
+      ports:
+        - "${ETCD2_PORT}:2379"
+        - "${ETCD2_80_PORT}:2380"
+      environment:
+        ETCDCTL_API: 3
+        ALLOW_NONE_AUTHENTICATION: "yes"
+      volumes:
+        - "${ETCD2_YAML_FILE}:/opt/bitnami/etcd/conf/etcd.yaml"
+        - "${ETCD2_DATA}:/etcd/data:rw"
+      networks:
+        study_blog:
+          ipv4_address: 172.26.0.102
+    etcd3:
+      image: bitnami/etcd:${ETCD_VERSION}
+      container_name: etcd3_con
+      entrypoint: ["/opt/bitnami/etcd/bin/etcd", "--config-file", "/opt/bitnami/etcd/conf/etcd.yaml"]
+      ports:
+        - "${ETCD3_PORT}:2379"
+        - "${ETCD3_80_PORT}:2380"
+      environment:
+        ETCDCTL_API: 3
+        ALLOW_NONE_AUTHENTICATION: "yes"
+      volumes:
+        - "${ETCD3_YAML_FILE}:/opt/bitnami/etcd/conf/etcd.yaml"
+        - "${ETCD3_DATA}:/etcd/data:rw"
+      networks:
+        study_blog:
+          ipv4_address: 172.26.0.103
+networks:
+  study_blog:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.26.0.0/16
+          gateway: 172.26.0.1
