@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "github.com/zxcblog/study-blog/user;user";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "user/token.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// User 用户管理
+service User {
+  rpc Register(RegisterReq)returns(UserAuthRes){
+    option (google.api.http) = {
+      post: "/v1/user/register",
+      body: "*",
+    };
+  }
+
+  // Login 用户登录
+  rpc Login(LoginReq)returns(UserAuthRes){
+    option (google.api.http) = {
+      post: "/v1/user/login",
+      body: "*",
+    };
+  }
+}
+
+// 注册请求
+message RegisterReq {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      title: "RegisterReq";
+      description: "注册请求";
+      required: ["username","password","confirm_password"],
+    }
+  };
+
+  string password         = 3[(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) ={
+    description: "密码",
+    min_length: 6,
+    max_length: 20,
+    pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$",
+  },(validate.rules).string = {min_len: 1}];// 密码
+
+
+  string username         = 1[(validate.rules).string = {min_len: 1}]; // 用户名
+  string email = 2[(validate.rules).string = {email: true}]; // 邮箱
+  string confirm_password = 4; // 确认密码
+  string img_cache        = 7; // 图形验证码
+}
+
+// 登录类型
+enum LoginType {
+  Detault_Login = 0; // 邮箱密码登录
+  Mobile_Login = 1; // 手机验证码登录
+}
+
+// 登录请求
+message LoginReq {
+  LoginType type  = 1; // 登录类型
+  string account  = 2 [(validate.rules).string = {min_len: 1}]; // 账号
+  string password = 3; // 认证密码
+  string captcha  = 4; // 验证码
+  string captcha_id = 5; // 验证码id
+}
+
+// 登录注册返回信息
+message UserAuthRes {
+  user.v1.Auth token_info = 1; // token认证信息
+}

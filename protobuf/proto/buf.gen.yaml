@@ -1,0 +1,28 @@
+version: v1beta1
+plugins:
+  - name: go
+    out: ../pb
+    opt:
+      - paths=source_relative
+  - name: validate
+    out: ../pb
+    opt:
+      - lang=go
+      - paths=source_relative
+  - name: go-grpc
+    out: ../pb
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+  - name: grpc-gateway
+    out: ../pb
+    opt:
+      - paths=source_relative
+      - allow_repeated_fields_in_body=true
+
+  # 生成swagger文件
+  - name: openapiv2
+    out: ../pb
+    strategy: all
+    opt:
+      - allow_merge=true,merge_file_name=info # 将不同文件夹下的swagger整合生成到同一个文件中,文件名称为 openapi

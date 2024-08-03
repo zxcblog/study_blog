@@ -1,0 +1,6 @@
+version: v2
+name: buf.build/zxcblog/study-blog
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/envoyproxy/protoc-gen-validate
+  - buf.build/grpc-ecosystem/grpc-gateway

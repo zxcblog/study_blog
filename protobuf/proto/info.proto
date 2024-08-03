@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "github.com/zxcblog/study-blog/pb;pb";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// 在.proto文件的包声明之后，添加以下内容来定义Swagger文档的基础信息
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "study-blog";
+    version: "1.0.0";
+    description: "学习笔记";
+    contact: {
+      name: "zxc";
+      url: "https://github.com/zxcblog/study-blog";
+      email: "zxc_7310@163.com";
+    };
+    license: {
+      name: "Apache 2.0";
+      url: "https://www.apache.org/licenses/LICENSE-2.0.html";
+    };
+  };
+};

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package user.v1;
+
+option go_package = "github.com/zxcblog/study-blog/user;user";
+
+// token 信息
+message Auth {
+  string token = 1; // 认证token
+  int64 expire = 2; // 认证过期时间
+}
+
+// 用户信息
+message UserInfo {
+  string account = 1; // 用户账号
+  string nickname = 2; // 用户昵称
+  string mobile = 3;
+}
