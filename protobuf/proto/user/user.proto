@@ -11,6 +11,57 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 // User 用户管理
 service User {
+  // 服务描述
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name: "User"
+    description: "用户管理"
+    external_docs: { //添加服务文档信息
+      url: "http://localhost:9090/user.doc"
+      description: "查看用户管理功能文档"
+    }
+  };
+
+  rpc QQRegister(RegisterReq)returns(UserAuthRes){
+    option (google.api.http) = {
+      post: "/v1/user/register/qq",
+      body: "*",
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "QQ注册"
+      description: "使用QQ号进行注册，已废弃"
+      operation_id: "QQRegister"
+      deprecated: true // 添加废弃标记
+      external_docs: { // 添加单个接口文档信息
+        url: "http://localhost:9090/user.doc#qq"
+        description: "QQ注册文档信息"
+      }
+
+      // 不需要认证
+      security:{}
+
+      // 设置请求头信息
+      parameters: {
+        headers: {
+          name: "x-Use-Env",
+          description: "使用的环境标识"
+          type: STRING
+        }
+      }
+
+      responses: {
+        key: "500"
+        value: {
+          description: "服务器出现问题了"
+          schema: {
+            json_schema: {type: STRING}
+          }
+        }
+      }
+    };
+
+  }
+
   rpc Register(RegisterReq)returns(UserAuthRes){
     option (google.api.http) = {
       post: "/v1/user/register",
@@ -35,6 +86,12 @@ message RegisterReq {
       description: "注册请求";
       required: ["username","password","confirm_password"],
     }
+    external_docs: {
+      url: "http://localhost:9090/user.doc#RegisterReq";
+      description: "注册请求文档";
+    }
+    // 请求示例
+    example: "{\"username\": \"zhouXiaoChuan\", \"password\": \"123456\", \"confirm_password\":\"123456\", \"email\":\"zxc_7310@163.com\"}"
   };
 
   string password         = 3[(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) ={
