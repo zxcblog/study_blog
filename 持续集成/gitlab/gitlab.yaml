@@ -1,0 +1,20 @@
+version: '3.6'
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: 'gitlab.local.com'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.local.com:9980'
+        gitlab_rails['gitlab_shell_ssh_port'] = 9922
+
+    ports:
+      - '9980:9980'
+      - '9922:22'
+    volumes:
+      - "./data/gitlab/etc:/etc/gitlab"
+      - "./data/gitlab/log:/var/log/gitlab"
+      - "./data/gitlab/opt:/var/opt/gitlab"
+    shm_size: '256m'

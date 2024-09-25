@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# 获取提交的消息记录
+message=$(cat $1)
+
+# 将消息根据空行进行切割， 获取到 header body footer三部分的信息
+IFS=$'\n\n' read -r -d '' header body footer <<< "$message"
+
+# header_type_regex="^Merge|(feat|fix|perf|refactor|version|test|docs|style|build|ci|lint|demo|chore):[[:space:]].*$"
+header_type_regex="^((Merge branch.*)|((revert: )?(feat|fix|perf|style|refactor|test|ci|docs|chore)(\(.+\))?: .*[^.]$))"
+# 检测header提交是否包含类型信息
+if ! [[ $header =~ $header_type_regex ]]; then
+    echo -e "错误: 不规范的提交信息！"
+	echo -e "提示: 请选择下方类型，提交说明长度不能小于10，注意：不能使用 . 结尾"
+	echo -e " feat: 新功能"
+	echo -e " fix: 问题修复"
+	echo -e " build: 依赖项更新，比如升级第三方库版本"
+	echo -e " ci: CI 配置或脚本更新"
+	echo -e " lint: 代码警告清理(基本不影响功能)"
+	echo -e " perf: 性能优化(不影响功能)"
+	echo -e " refactor: 代码重构(不影响功能)"
+	echo -e " version: SDK版本号更新(不影响功能)"
+	echo -e " test: 测试代码更新(不影响功能)"
+	echo -e " demo: demo代码更新(不影响功能)"
+	echo -e " docs: 文档更新(不影响功能)"
+	echo -e " style: 代码格式化(不影响功能)"
+	echo -e " chore: 代码或文档以外的更新，比如更新CHANGELOG(不影响功能)"
+    echo -e "示例: feat: 订单模块增加倒计时功能"
+    echo -e "示例: feat(order): 订单模块增加倒计时功能"
+	exit 1
+fi
+
+# 从header中切割出要进行提交的信息，并校验长度是否大于4
+IFS=' ' read -r -a parts <<< "$header"
+subject="${parts[1]}"
+
+# 检查 subject 的长度是否大于4
+if [[ ${#subject} -lt 4 ]]; then
+    echo "错误: 不规范的提交信息！提交信息(subject)长度不能小于4"
+    exit 1
+fi
+
+# 检测 body 提交信息是否包含需求连接
+body_regex="(http://|https://)"
+if ! [[ $body =~ $body_regex ]]; then
+    echo "错误: 不规范的提交信息， 提交内容(body)必须包含需求或缺陷连接"
+    exit 1
+fi
